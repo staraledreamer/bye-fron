@@ -1,8 +1,7 @@
 import socket
-import threading
-
 import pyaudio
-
+import select
+import threading
 
 class AudioSender:
 
@@ -51,8 +50,7 @@ class AudioSender:
 
     def __client_streaming(self):
         self.__sending_socket.connect((self.__host, self.__port))
-        self.__stream = self.__audio.open(format=self.__audio_format, channels=self.__channels, rate=self.__rate,
-                                          input=True, frames_per_buffer=self.__frame_chunk)
+        self.__stream = self.__audio.open(format=self.__audio_format, channels=self.__channels, rate=self.__rate, input=True, frames_per_buffer=self.__frame_chunk)
         while self.__running:
             self.__sending_socket.send(self.__stream.read(self.__frame_chunk))
 
@@ -60,7 +58,6 @@ class AudioSender:
 class AudioReceiver:
 
     def __init__(self, host, port, slots=8, audio_format=pyaudio.paInt16, channels=1, rate=44100, frame_chunk=4096):
-        self.__stream = None
         self.__host = host
         self.__port = port
 
@@ -85,8 +82,7 @@ class AudioReceiver:
             print("Audio server is running already")
         else:
             self.__running = True
-            self.__stream = self.__audio.open(format=self.__audio_format, channels=self.__channels, rate=self.__rate,
-                                              output=True, frames_per_buffer=self.__frame_chunk)
+            self.__stream = self.__audio.open(format=self.__audio_format, channels=self.__channels, rate=self.__rate, output=True, frames_per_buffer=self.__frame_chunk)
             thread = threading.Thread(target=self.__server_listening)
             thread.start()
 
@@ -107,7 +103,7 @@ class AudioReceiver:
             thread = threading.Thread(target=self.__client_connection, args=(connection, address,))
             thread.start()
 
-    def __client_connection(self, connection):
+    def __client_connection(self, connection, address):
         while self.__running:
             data = connection.recv(self.__frame_chunk)
             self.__stream.write(data)
@@ -123,3 +119,4 @@ class AudioReceiver:
             self.__block.release()
         else:
             print("Server not running!")
+
