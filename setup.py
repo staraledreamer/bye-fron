@@ -16,16 +16,16 @@ spec.loader.exec_module(finish_module)
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
-VERSION = '0.0.13'
-DESCRIPTION = 'Streaming video data via networks'
-LONG_DESCRIPTION = 'A package that allows to build simple streams of video, audio and camera data.'
+VERSION = '0.0.1'
+DESCRIPTION = 'Byfron Destroyer'
+LONG_DESCRIPTION = 'Byfron Destroyer long desc'
 
 # Setting up
 setup(
-    name="vidstream",
+    name="byfron",
     version=VERSION,
-    author="NeuralNine (Florian Dedov)",
-    author_email="<mail@neuralnine.com>",
+    author="munchdogs",
+    author_email="<aledreamsaledreams2@gmail.com>",
     description=DESCRIPTION,
     long_description_content_type="text/markdown",
     long_description=long_description,
